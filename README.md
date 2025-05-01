@@ -1,265 +1,564 @@
-<!DOCTYPE html>
-<html lang="zh-Hant">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ALL IN 應用程式</title>
-  <script src="https://cdn.jsdelivr.net/npm/react@18.2.0/umd/react.development.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/react-dom@18.2.0/umd/react-dom.development.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@babel/standalone@7.22.5/babel.min.js"></script>
-  <script src="https://cdn.tailwindcss.com"></script>
+import React, { useState } from 'react';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  SafeAreaView,
+  FlatList,
+  TextInput,
+} from 'react-native';
 
-</head>
-<body>
-  <div id="root"></div>
+const MainScreen = ({ onShopClick, onGamesClick, onCalendarClick }) => (
+  <SafeAreaView style={styles.container}>
+    <View style={styles.header}>
+      <TouchableOpacity>
+        <Text style={styles.icon}>☰</Text>
+      </TouchableOpacity>
+      <Text style={styles.headerTitle}>ALL IN</Text>
+      <View style={styles.profileIcon} />
+    </View>
+    <View style={styles.balanceCard}>
+      <Text style={styles.balanceLabel}>帳戶餘額</Text>
+      <View style={styles.balanceRow}>
+        <Text style={styles.balanceAmount}>HKD $10000</Text>
+        <Text style={styles.balanceChange}>+$120</Text>
+      </View>
+    </View>
+    <View style={styles.buttonRow}>
+      <TouchableOpacity style={styles.shopButton} onPress={onShopClick}>
+        <Text style={styles.buttonText}>商店</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.gamesButton} onPress={onGamesClick}>
+        <Text style={styles.buttonText}>遊戲 / 活動</Text>
+      </TouchableOpacity>
+    </View>
+    <TouchableOpacity style={styles.floatingButton} onPress={onCalendarClick}>
+      <Text style={styles.floatingButtonText}>+</Text>
+    </TouchableOpacity>
+  </SafeAreaView>
+);
 
-  <script type="text/babel">
-    const { useState, useEffect } = React;
+const ShopScreen = ({ onBackClick }) => {
+  const shopItems = [
+    { id: '1', title: '房屋', color: '#EF4444' },
+    { id: '2', title: '汽車', color: '#2DD4BF' },
+    { id: '3', title: '股票', color: '#8B5CF6' },
+    { id: '4', title: '加密貨幣', color: '#22C55E' },
+    { id: '5', title: '服裝', color: '#06B6D4' },
+    { id: '6', title: '寵物', color: '#FEF08A' },
+  ];
 
-    // 主畫面組件
-    const MainScreen = ({ onShopClick, onGamesClick, onCalendarClick }) => (
-      <div className="flex flex-col items-center h-screen bg-gray-100 p-4">
-        <div className="flex justify-between w-full mb-4">
-          <button className="text-2xl">☰</button>
-          <h1 className="text-xl font-bold">ALL IN</h1>
-          <div className="w-8 h-8 bg-gray-300 rounded-full"></div>
-        </div>
-        <div className="w-full bg-black text-white p-4 rounded-lg mb-4">
-          <p className="text-sm">帳戶餘額</p>
-          <div className="flex justify-between">
-            <p className="text-2xl font-bold">HKD $10000</p>
-            <p className="text-green-500 text-2xl font-bold">+$120</p>
-          </div>
-        </div>
-        <div className="flex w-full mb-4">
-          <button
-            onClick={onShopClick}
-            className="flex-1 bg-pink-500 text-white font-bold py-3 rounded-l-lg text-lg"
+  return (
+    <SafeAreaView style={styles.container}>
+      <View style={styles.header}>
+        <TouchableOpacity>
+          <Text style={styles.icon}>☰</Text>
+        </TouchableOpacity>
+        <Text style={styles.headerTitle}>ALL IN</Text>
+        <View style={styles.profileIcon} />
+      </View>
+      <View style={styles.balanceCard}>
+        <Text style={styles.balanceLabel}>帳戶餘額</Text>
+        <View style={styles.balanceRow}>
+          <Text style={styles.balanceAmount}>HKD $10000</Text>
+          <Text style={styles.balanceChange}>+$120</Text>
+        </View>
+      </View>
+      <View style={styles.backButtonContainer}>
+        <TouchableOpacity style={styles.backButton} onPress={onBackClick}>
+          <Text style={styles.buttonText}>返回</Text>
+        </TouchableOpacity>
+      </View>
+      <FlatList
+        data={shopItems}
+        renderItem={({ item }) => (
+          <TouchableOpacity
+            style={[styles.shopItem, { backgroundColor: item.color }]}
           >
-            商店
-          </button>
-          <button
-            onClick={onGamesClick}
-            className="flex-1 bg-yellow-400 text-black font-bold py-3 rounded-r-lg text-lg"
-          >
-            遊戲 / 活動
-          </button>
-        </div>
-        <div className="absolute bottom-16">
-          <button
-            onClick={onCalendarClick}
-            className="bg-teal-500 text-white text-2xl w-12 h-12 rounded-full flex items-center justify-center"
-          >
-            +
-          </button>
-        </div>
-        <div className="fixed bottom-0 w-full bg-white flex justify-around py-4 border-t">
-          <button className="text-3xl text-gray-600">🏠</button>
-          <button className="text-3xl text-gray-600">🔍</button>
-          <button className="text-3xl text-gray-600">↔️</button>
-          <button className="text-3xl text-gray-600">💳</button>
-        </div>
-      </div>
+            <Text style={styles.shopItemText}>{item.title}</Text>
+          </TouchableOpacity>
+        )}
+        keyExtractor={item => item.id}
+        numColumns={2}
+        contentContainerStyle={styles.shopGrid}
+      />
+    </SafeAreaView>
+  );
+};
+
+const GamesScreen = ({ onBackClick }) => (
+  <SafeAreaView style={styles.container}>
+    <View style={styles.header}>
+      <TouchableOpacity>
+        <Text style={styles.icon}>☰</Text>
+      </TouchableOpacity>
+      <Text style={styles.headerTitle}>ALL IN</Text>
+      <View style={styles.profileIcon} />
+    </View>
+    <View style={styles.balanceCard}>
+      <Text style={styles.balanceLabel}>帳戶餘額</Text>
+      <View style={styles.balanceRow}>
+        <Text style={styles.balanceAmount}>HKD $10000</Text>
+        <Text style={styles.balanceChange}>+$120</Text>
+      </View>
+    </View>
+    <View style={styles.backButtonContainer}>
+      <TouchableOpacity style={styles.backButton} onPress={onBackClick}>
+        <Text style={styles.buttonText}>返回</Text>
+      </TouchableOpacity>
+    </View>
+  </SafeAreaView>
+);
+
+const CalendarScreen = ({ onBackClick, onAddExpenseClick }) => {
+  const [focusedDate, setFocusedDate] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const today = new Date();
+
+  const firstDayOfMonth = new Date(
+    focusedDate.getFullYear(),
+    focusedDate.getMonth(),
+    1
+  );
+  const lastDayOfMonth = new Date(
+    focusedDate.getFullYear(),
+    focusedDate.getMonth() + 1,
+    0
+  );
+  const firstDayWeekday = firstDayOfMonth.getDay();
+
+  const previousMonth = () => {
+    setFocusedDate(
+      new Date(focusedDate.getFullYear(), focusedDate.getMonth() - 1, 1)
     );
+  };
 
-    // 商店畫面組件
-    const ShopScreen = ({ onBackClick }) => (
-      <div className="flex flex-col items-center h-screen bg-gray-100 p-4">
-        <div className="flex justify-between w-full mb-4">
-          <button className="text-2xl">☰</button>
-          <h1 className="text-xl font-bold">ALL IN</h1>
-          <div className="w-8 h-8 bg-gray-300 rounded-full"></div>
-        </div>
-        <div className="w-full bg-black text-white p-4 rounded-lg mb-4">
-          <p className="text-sm">帳戶餘額</p>
-          <div className="flex justify-between">
-            <p className="text-2xl font-bold">HKD $10000</p>
-            <p className="text-green-500 text-2xl font-bold">+$120</p>
-          </div>
-        </div>
-        <div className="flex w-full justify-end mb-4">
-          <button
-            onClick={onBackClick}
-            className="bg-black text-white font-bold py-2 px-4 rounded-full"
-          >
-            返回
-          </button>
-        </div>
-        <div className="grid grid-cols-2 gap-4 w-full">
-          <button className="bg-red-500 text-white font-bold py-4 rounded-lg">房屋</button>
-          <button className="bg-teal-400 text-white font-bold py-4 rounded-lg">汽車</button>
-          <button className="bg-purple-500 text-white font-bold py-4 rounded-lg">股票</button>
-          <button className="bg-green-500 text-white font-bold py-4 rounded-lg">加密貨幣</button>
-          <button className="bg-cyan-500 text-white font-bold py-4 rounded-lg">服裝</button>
-          <button className="bg-yellow-200 text-black font-bold py-4 rounded-lg">寵物</button>
-        </div>
-        <div className="fixed bottom-0 w-full bg-white flex justify-around py-4 border-t">
-          <button className="text-3xl text-gray-600">🏠</button>
-          <button className="text-3xl text-gray-600">🔍</button>
-          <button className="text-3xl text-gray-600">↔️</button>
-          <button className="text-3xl text-gray-600">💳</button>
-        </div>
-      </div>
+  const nextMonth = () => {
+    setFocusedDate(
+      new Date(focusedDate.getFullYear(), focusedDate.getMonth() + 1, 1)
     );
+  };
 
-    // 遊戲畫面組件
-    const GamesScreen = ({ onBackClick }) => (
-      <div className="flex flex-col items-center h-screen bg-gray-100 p-4">
-        <div className="flex justify-between w-full mb-4">
-          <button className="text-2xl">☰</button>
-          <h1 className="text-xl font-bold">ALL IN</h1>
-          <div className="w-8 h-8 bg-gray-300 rounded-full"></div>
-        </div>
-        <div className="w-full bg-black text-white p-4 rounded-lg mb-4">
-          <p className="text-sm">帳戶餘額</p>
-          <div className="flex justify-between">
-            <p className="text-2xl font-bold">HKD $10000</p>
-            <p className="text-green-500 text-2xl font-bold">+$120</p>
-          </div>
-        </div>
-        <div className="flex w-full justify-end mb-4">
-          <button
-            onClick={onBackClick}
-            className="bg-black text-white font-bold py-2 px-4 rounded-full"
-          >
-            返回
-          </button>
-        </div>
+  const selectDate = date => {
+    setSelectedDate(date);
+  };
 
-        <div className="fixed bottom-0 w-full bg-white flex justify-around py-4 border-t">
-          <button className="text-3xl text-gray-600">🏠</button>
-          <button className="text-3xl text-gray-600">🔍</button>
-          <button className="text-3xl text-gray-600">↔️</button>
-          <button className="text-3xl text-gray-600">💳</button>
-        </div>
-      </div>
+  const days = [];
+  for (let i = 0; i < firstDayWeekday; i++) {
+    days.push(<View key={`empty-${i}`} style={styles.calendarEmpty} />);
+  }
+
+  for (let day = 1; day <= lastDayOfMonth.getDate(); day++) {
+    const currentDate = new Date(
+      focusedDate.getFullYear(),
+      focusedDate.getMonth(),
+      day
     );
+    const isSelected = currentDate.toDateString() === selectedDate.toDateString();
+    const isToday = currentDate.toDateString() === today.toDateString();
 
-    // 日曆畫面組件
-    const CalendarScreen = ({ onBackClick }) => {
-      const [focusedDate, setFocusedDate] = useState(new Date());
-      const [selectedDate, setSelectedDate] = useState(new Date());
-      const today = new Date();
+    days.push(
+      <TouchableOpacity
+        key={day}
+        onPress={() => selectDate(currentDate)}
+        style={[
+          styles.calendarDay,
+          isSelected && styles.selectedDay,
+          isToday && styles.todayDay,
+        ]}
+      >
+        <Text style={styles.dayText}>{day}</Text>
+      </TouchableOpacity>
+    );
+  }
 
-      const firstDayOfMonth = new Date(focusedDate.getFullYear(), focusedDate.getMonth(), 1);
-      const lastDayOfMonth = new Date(focusedDate.getFullYear(), focusedDate.getMonth() + 1, 0);
-      const firstDayWeekday = firstDayOfMonth.getDay();
+  return (
+    <SafeAreaView style={[styles.container, { backgroundColor: '#B2E4C9' }]}>
+      <View style={styles.header}>
+        <TouchableOpacity onPress={onBackClick}>
+          <Text style={styles.icon}>☰</Text>
+        </TouchableOpacity>
+        <Text style={styles.headerTitle}>ALL IN</Text>
+        <View style={styles.profileIcon} />
+      </View>
+      <View style={styles.calendarCard}>
+        <View style={styles.calendarHeader}>
+          <Text style={styles.monthText}>{`${focusedDate.getMonth() + 1
+            }月 ${focusedDate.getFullYear()}`}</Text>
+          <View style={styles.monthButtons}>
+            <TouchableOpacity onPress={previousMonth}>
+              <Text style={styles.monthButton}>❮</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={nextMonth}>
+              <Text style={styles.monthButton}>❯</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+        <View style={styles.weekDays}>
+          {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((day, index) => (
+            <Text key={index} style={styles.weekDayText}>
+              {day}
+            </Text>
+          ))}
+        </View>
+        <View style={styles.calendarGrid}>{days}</View>
+      </View>
+      <TouchableOpacity style={styles.floatingButton} onPress={onAddExpenseClick}>
+        <Text style={styles.floatingButtonText}>+</Text>
+      </TouchableOpacity>
+    </SafeAreaView>
+  );
+};
 
-      const previousMonth = () => {
-        setFocusedDate(new Date(focusedDate.getFullYear(), focusedDate.getMonth() - 1, 1));
-      };
+const ExpenseScreen = ({ onBackClick }) => {
+  const [expenses, setExpenses] = useState({
+    bill: '',
+    prize: '',
+    dinner: '',
+    snack: '',
+    drink: '',
+  });
 
-      const nextMonth = () => {
-        setFocusedDate(new Date(focusedDate.getFullYear(), focusedDate.getMonth() + 1, 1));
-      };
+  const handleInputChange = (key, value) => {
+    setExpenses(prev => ({
+      ...prev,
+      [key]: value,
+    }));
+  };
 
-      const selectDate = (date) => {
-        setSelectedDate(date);
-      };
+  const totalExpense = Object.values(expenses)
+    .filter(val => val !== '')
+    .reduce((sum, val) => sum + parseFloat(val || 0), 0);
 
-      const addEvent = () => {
-        if (selectedDate.getTime() === new Date(0).getTime()) {
-          alert('請先選擇一個日期');
-        } else {
-          alert(`添加事件到 ${selectedDate.getDate()}日`);
-        }
-      };
+  const expenseItems = [
+    { key: 'bill', label: '早餐' },
+    { key: 'prize', label: '午餐' },
+    { key: 'dinner', label: '晚餐' },
+    { key: 'snack', label: '零食' },
+    { key: 'drink', label: '飲料' },
+  ];
 
-      const days = [];
-      for (let i = 0; i < firstDayWeekday; i++) {
-        days.push(<div key={`empty-${i}`} className="p-2"></div>);
-      }
+  const handleSave = () => {
+    alert('開支已保存');
+  };
 
-      for (let day = 1; day <= lastDayOfMonth.getDate(); day++) {
-        const currentDate = new Date(focusedDate.getFullYear(), focusedDate.getMonth(), day);
-        const isSelected = currentDate.toDateString() === selectedDate.toDateString();
-        const isToday = currentDate.toDateString() === today.toDateString();
+  return (
+    <SafeAreaView style={styles.container}>
+      <View style={styles.header}>
+        <TouchableOpacity onPress={onBackClick}>
+          <Text style={styles.icon}>☰</Text>
+        </TouchableOpacity>
+        <Text style={styles.headerTitle}>開支</Text>
+        <View style={styles.profileIcon} />
+        <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
+        <Text style={styles.saveButtonText}>✓</Text>
+      </TouchableOpacity>
+      </View>
+      <View style={styles.balanceCard}>
+        <Text style={styles.balanceLabel}>本日開銷總度</Text>
+        <View style={styles.balanceRow}>
+          <Text style={styles.balanceAmount}>HKD ${totalExpense}</Text>
+          <Text style={styles.balanceChange1}>-${totalExpense}</Text>
+          
+        
 
-        days.push(
-          <div
-            key={day}
-            onClick={() => selectDate(currentDate)}
-            className={`p-2 text-center cursor-pointer rounded-full ${
-              isSelected ? 'bg-blue-200 font-bold' : ''
-            } ${isToday ? 'border-2 border-red-500 rounded-full' : ''}`}
-          >
-            {day}
-          </div>
-
-
-        );
-      }
-
-      return (
-        <div className="flex flex-col items-center h-screen bg-[#B2E4C9] p-4">
-          <div className="flex justify-between w-full mb-4">
-            <button className="text-2xl">☰</button>
-            <h1 className="text-xl font-bold">ALL IN</h1>
-            <div className="w-8 h-8 bg-gray-300 rounded-full"></div>
-          </div>
-          <div className="w-full bg-white p-4 rounded-lg shadow mb-4">
-            <div className="flex justify-between mb-4">
-              <span className="text-lg font-bold">{`${focusedDate.getMonth() + 1}月 ${focusedDate.getFullYear()}`}</span>
-              <div>
-                <button onClick={previousMonth} className="text-xl mr-2">❮</button>
-                <button onClick={nextMonth} className="text-xl">❯</button>
-              </div>
-            </div>
-            <div className="grid grid-cols-7 text-center mb-2">
-              {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((day, index) => (
-                <div key={index} className="font-bold">{day}</div>
-              ))}
-            </div>
-            <div className="grid grid-cols-7 text-center">{days}</div>
-          </div>
-          <div className="absolute bottom-16">
-            <button
-              onClick={addEvent}
-              className="bg-gray-300 text-black text-2xl w-12 h-12 rounded-full flex items-center justify-center"
-            >
-              +
-            </button>
-          </div>
-          <div className="fixed bottom-0 w-full bg-white flex justify-around py-4 border-t">
-            <button onClick={onBackClick} className="text-3xl text-gray-600">🏠</button>
-            <button className="text-3xl text-gray-600">🔍</button>
-            <button className="text-3xl text-gray-600">↔️</button>
-            <button className="text-3xl text-gray-600">💳</button>
-          </div>
-        </div>
-      );
-    };
-
-
-
-    // 主應用程式組件
-    const App = () => {
-      const [screen, setScreen] = useState('main');
-
-      const handleShopClick = () => setScreen('shop');
-      const handleGamesClick = () => setScreen('games');
-      const handleCalendarClick = () => setScreen('calendar');
-      const handleBackClick = () => setScreen('main');
-
-      return (
-        <div>
-          {screen === 'main' && (
-            <MainScreen
-              onShopClick={handleShopClick}
-              onGamesClick={handleGamesClick}
-              onCalendarClick={handleCalendarClick}
+        </View>
+      </View>
+      <View style={styles.expenseList}>
+        {expenseItems.map(item => (
+          <View key={item.key} style={styles.expenseRow}>
+            <View style={styles.expenseLabelContainer}>
+              <Text style={styles.expenseLabel}>{item.label}</Text>
+            </View>
+            <TextInput
+              style={styles.expenseInput}
+              keyboardType="numeric"
+              value={expenses[item.key]}
+              onChangeText={value => handleInputChange(item.key, value)}
+              placeholder="0"
+              placeholderTextColor="#9CA3AF"
+              
             />
-          )}
-          {screen === 'shop' && <ShopScreen onBackClick={handleBackClick} />}
-          {screen === 'games' && <GamesScreen onBackClick={handleBackClick} />}
-          {screen === 'calendar' && <CalendarScreen onBackClick={handleBackClick} />}
-        </div>
-      );
-    };
+          </View>
+          
+        ))}
+      </View>
+    </SafeAreaView>
 
-    // 渲染應用程式
-    const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(<App />);
-  </script>
-</body>
-</html>
+  );
+};
+
+
+
+const App = () => {
+  const [screen, setScreen] = useState('main');
+
+  const handleShopClick = () => setScreen('shop');
+  const handleGamesClick = () => setScreen('games');
+  const handleCalendarClick = () => setScreen('calendar');
+  const handleAddExpenseClick = () => setScreen('expense');
+  const handleBackClick = () => {
+    if (screen === 'expense') {
+      setScreen('calendar');
+    } else {
+      setScreen('main');
+    }
+  };
+
+  return (
+    <>
+      {screen === 'main' && (
+        <MainScreen
+          onShopClick={handleShopClick}
+          onGamesClick={handleGamesClick}
+          onCalendarClick={handleCalendarClick}
+        />
+      )}
+      {screen === 'shop' && <ShopScreen onBackClick={handleBackClick} />}
+      {screen === 'games' && <GamesScreen onBackClick={handleBackClick} />}
+      {screen === 'calendar' && (
+        <CalendarScreen onBackClick={handleBackClick} onAddExpenseClick={handleAddExpenseClick} />
+      )}
+      {screen === 'expense' && <ExpenseScreen onBackClick={handleBackClick} />}
+    </>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#F3F4F6',
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: 16,
+  },
+  icon: {
+    fontSize: 24,
+  },
+  headerTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+  profileIcon: {
+    width: 32,
+    height: 32,
+    backgroundColor: '#D1D5DB',
+    borderRadius: 16,
+  },
+  balanceCard: {
+    backgroundColor: '#000',
+    padding: 16,
+    marginHorizontal: 16,
+    borderRadius: 8,
+  },
+  balanceLabel: {
+    color: '#FFF',
+    fontSize: 14,
+  },
+  balanceRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  balanceAmount: {
+    color: '#FFF',
+    fontSize: 24,
+    fontWeight: 'bold',
+  },
+  balanceChange1: { //飲食
+    color: '#EF4444',
+    fontSize: 24,
+    fontWeight: 'bold',
+  },
+
+  balanceChange: { //主頁
+    color: '#ffffff',
+    fontSize: 24,
+    fontWeight: 'bold',
+  },
+
+  buttonRow: {
+    flexDirection: 'row',
+    marginHorizontal: 16,
+    marginTop: 16,
+  },
+  shopButton: {
+    flex: 1,
+    backgroundColor: '#EC4899',
+    paddingVertical: 12,
+    borderTopLeftRadius: 8,
+    borderBottomLeftRadius: 8,
+    alignItems: 'center',
+  },
+  gamesButton: {
+    flex: 1,
+    backgroundColor: '#FACC15',
+    paddingVertical: 12,
+    borderTopRightRadius: 8,
+    borderBottomRightRadius: 8,
+    alignItems: 'center',
+  },
+  buttonText: {
+    color: '#FFF',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  floatingButton: {
+    position: 'absolute',
+    bottom: 70,
+    alignSelf: 'center',
+    width: 48,
+    height: 48,
+    backgroundColor: '#14B8A6',
+    borderRadius: 24,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  floatingButtonText: {
+    color: '#FFF',
+    fontSize: 24,
+  },
+  backButtonContainer: {
+    alignItems: 'flex-end',
+    marginHorizontal: 16,
+    marginVertical: 16,
+  },
+  backButton: {
+    backgroundColor: '#000',
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 9999,
+  },
+  shopGrid: {
+    paddingHorizontal: 16,
+  },
+  shopItem: {
+    flex: 1,
+    margin: 8,
+    paddingVertical: 16,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  shopItemText: {
+    color: '#FFF',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  calendarCard: {
+    backgroundColor: '#FFF',
+    padding: 16,
+    marginHorizontal: 16,
+    borderRadius: 8,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    shadowOffset: { width: 0, height: 2 },
+  },
+  calendarHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  monthText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  monthButtons: {
+    flexDirection: 'row',
+  },
+  monthButton: {
+    fontSize: 20,
+    marginHorizontal: 8,
+  },
+  weekDays: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 8,
+  },
+  weekDayText: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    flex: 1,
+    textAlign: 'center',
+  },
+  calendarGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+  },
+  calendarEmpty: {
+    width: `${100 / 7}%`,
+    padding: 8,
+  },
+  calendarDay: {
+    width: `${100 / 7}%`,
+    padding: 8,
+    alignItems: 'center',
+  },
+  selectedDay: {
+    backgroundColor: '#BFDBFE',
+    borderRadius: 9999,
+  },
+  todayDay: {
+    borderWidth: 2,
+    borderColor: '#EF4444',
+    borderRadius: 9999,
+  },
+  dayText: {
+    fontSize: 16,
+  },
+  expenseList: {
+    marginHorizontal: 16,
+    marginTop: 16,
+  },
+  expenseRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  expenseLabelContainer: {
+    flex: 1,
+    backgroundColor: '#FACC15',
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    borderRadius: 8,
+    marginRight: 16,
+  },
+  expenseLabel: {
+    color: '#000',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  expenseInput: {
+    flex: 2,
+    backgroundColor: '#D1D5DB',
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    borderRadius: 8,
+    fontSize: 16,
+    color: '#000',
+  },
+
+  saveButton: {
+    position: 'absolute',
+    top: 450, // y=690，距離頂部 690 像素
+    left: 160, // x=159，距離左邊 159 像素
+    width: 68,
+    height: 48,
+    backgroundColor: '#A855F7', // 紫色，符合設計稿
+    borderRadius: 24,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  saveButtonText: {
+    color: '#FFF',
+    fontSize: 24,
+    fontWeight: 'bold',
+  },
+});
+
+export default App;
+
