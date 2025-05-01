@@ -3,11 +3,7 @@
 <body>
     <h1>測試 JavaScript</h1>
     <script>
-        document.write("Hello, Google Chrome!");
-    </script>
-</body>
-</html>
-import React, { useState } from 'react';
+       import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -570,3 +566,6 @@ const styles = StyleSheet.create({
 });
 
 export default App;
+    </script>
+</body>
+</html>
