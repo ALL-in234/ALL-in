@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ALL IN 應用程式</title>
+  <script src="https://cdn.jsdelivr.net/npm/react@18.2.0/umd/react.development.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/react-dom@18.2.0/umd/react-dom.development.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@babel/standalone@7.22.5/babel.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .icon-hover:hover {
+      color: #3b82f6; /* Tailwind blue-500 */
+      transform: scale(1.1);
+      transition: all 0.2s ease;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect } = React;
+
+    // 主畫面組件
+    const MainScreen = ({ onShopClick, onGamesClick, onCalendarClick, currentScreen }) => (
+      <div className="flex flex-col items-center h-screen bg-gray-100 p-4">
+        <div className="flex justify-between w-full mb-4">
+          <button className="text-2xl text-gray-600 icon-hover" aria-label="開啟選單">
+            <i className="fas fa-bars"></i>
+          </button>
+          <h1 className="text-xl font-bold">ALL IN</h1>
+          <div className="w-8 h-8 bg-gray-300 rounded-full"></div>
+        </div>
+        <div className="w-full bg-black text-white p-4 rounded-lg mb-4">
+          <p className="text-sm">帳戶餘額</p>
+          <div className="flex justify-between">
+            <p className="text-2xl font-bold">HKD $10000</p>
+            <p className="text-green-500 text-2xl font-bold">+$120</p>
+          </div>
+        </div>
+        <div className="flex w-full mb-4">
+          <button
+            onClick={onShopClick}
+            className="flex-1 bg-pink-500 text-white font-bold py-3 rounded-l-lg text-lg flex items-center justify-center hover:bg-pink-600 transition-colors"
+            aria-label="前往商店"
+          >
+            <i className="fas fa-shopping-cart mr-2"></i> 商店
+          </button>
+          <button
+            onClick={onGamesClick}
+            className="flex-1 bg-yellow-400 text-black font-bold py-3 rounded-r-lg text-lg flex items-center justify-center hover:bg-yellow-500 transition-colors"
+            aria-label="前往遊戲與活動"
+          >
+            <i className="fas fa-gamepad mr-2"></i> 遊戲 / 活動
+          </button>
+        </div>
+        <div className="absolute bottom-16">
+          <button
+            onClick={onCalendarClick}
+            className="bg-teal-500 text-white text-2xl w-12 h-12 rounded-full flex items-center justify-center hover:bg-teal-600 hover:scale-110 transition-transform duration-200"
+            aria-label="新增事件"
+          >
+            <i className="fas fa-plus"></i>
+          </button>
+        </div>
+        <div className="fixed bottom-0 w-full bg-white flex justify-around py-4 border-t">
+          <button className={`text-2xl ${currentScreen === 'main' ? 'text-teal-500' : 'text-gray-600'} icon-hover`} aria-label="首頁">
+            <i className="fas fa-home"></i>
+          </button>
+          <button className="text-2xl text-gray-600 icon-hover" aria-label="搜尋">
+            <i className="fas fa-search"></i>
+          </button>
+          <button className="text-2xl text-gray-600 icon-hover" aria-label="交易">
+            <i className="fas fa-exchange-alt"></i>
+          </button>
+          <button className="text-2xl text-gray-600 icon-hover" aria-label="支付">
+            <i className="fas fa-credit-card"></i>
+          </button>
+        </div>
+      </div>
+    );
+
+    // 商店畫面組件
+    const ShopScreen = ({ onBackClick, currentScreen }) => (
+      <div className="flex flex-col items-center h-screen bg-gray-100 p-4">
+        <div className="flex justify-between w-full mb-4">
+          <button className="text-2xl text-gray-600 icon-hover" aria-label="開啟選單">
+            <i className="fas fa-bars"></i>
+          </button>
+          <h1 className="text-xl font-bold">ALL IN</h1>
+          <div className="w-8 h-8 bg-gray-300 rounded-full"></div>
+        </div>
+        <div className="w-full bg-black text-white p-4 rounded-lg mb-4">
+          <p className="text-sm">帳戶餘額</p>
+          <div className="flex justify-between">
+            <p className="text-2xl font-bold">HKD $10000</p>
+            <p className="text-green-500 text-2xl font-bold">+$120</p>
+          </div>
+        </div>
+        <div className="flex w-full justify-end mb-4">
+          <button
+            onClick={onBackClick}
+            className="bg-black text-white font-bold py-2 px-4 rounded-full hover:bg-gray-800 transition-colors"
+            aria-label="返回主畫面"
+          >
+            返回
+          </button>
+        </div>
+        <div className="grid grid-cols-2 gap-4 w-full">
+          <button className="flex items-center justify-center bg-red-500 text-white font-bold py-4 rounded-lg hover:bg-red-600 transition-colors" aria-label="房屋選項">
+            <i className="fas fa-home mr-2"></i> 房屋
+          </button>
+          <button className="flex items-center justify-center bg-teal-400 text-white font-bold py-4 rounded-lg hover:bg-teal-500 transition-colors" aria-label="汽車選項">
+            <i className="fas fa-car mr-2"></i> 汽車
+          </button>
+          <button className="flex items-center justify-center bg-purple-500 text-white font-bold py-4 rounded-lg hover:bg-purple-600 transition-colors" aria-label="股票選項">
+            <i className="fas fa-chart-line mr-2"></i> 股票
+          </button>
+          <button className="flex items-center justify-center bg-green-500 text-white font-bold py-4 rounded-lg hover:bg-green-600 transition-colors" aria-label="加密貨幣選項">
+            <i className="fas fa-coins mr-2"></i> 加密貨幣
+          </button>
+          <button className="flex items-center justify-center bg-cyan-500 text-white font-bold py-4 rounded-lg hover:bg-cyan-600 transition-colors" aria-label="服裝選項">
+            <i className="fas fa-tshirt mr-2"></i> 服裝
+          </button>
+          <button className="flex items-center justify-center bg-yellow-200 text-black font-bold py-4 rounded-lg hover:bg-yellow-300 transition-colors" aria-label="寵物選項">
+            <i className="fas fa-paw mr-2"></i> 寵物
+          </button>
+        </div>
+        <div className="fixed bottom-0 w-full bg-white flex justify-around py-4 border-t">
+          <button onClick={onBackClick} className={`text-2xl ${currentScreen === 'main' ? 'text-teal-500' : 'text-gray-600'} icon-hover`} aria-label="首頁">
+            <i className="fas fa-home"></i>
+          </button>
+          <button className="text-2xl text-gray-600 icon-hover" aria-label="搜尋">
+            <i className="fas fa-search"></i>
+          </button>
+          <button className="text-2xl text-gray-600 icon-hover" aria-label="交易">
+            <i className="fas fa-exchange-alt"></i>
+          </button>
+          <button className="text-2xl text-gray-600 icon-hover" aria-label="支付">
+            <i className="fas fa-credit-card"></i>
+          </button>
+        </div>
+      </div>
+    );
+
+    // 遊戲畫面組件
+    const GamesScreen = ({ onBackClick, currentScreen }) => (
+      <div className="flex flex-col items-center h-screen bg-gray-100 p-4">
+        <div className="flex justify-between w-full mb-4">
+          <button className="text-2xl text-gray-600 icon-hover" aria-label="開啟選單">
+            <i className="fas fa-bars"></i>
+          </button>
+          <h1 className="text-xl font-bold">ALL IN</h1>
+          <div className="w-8 h-8 bg-gray-300 rounded-full"></div>
+        </div>
+        <div className="w-full bg-black text-white p-4 rounded-lg mb-4">
+          <p className="text-sm">帳戶餘額</p>
+          <div className="flex justify-between">
+            <p className="text-2xl font-bold">HKD $10000</p>
+            <p className="text-green-500 text-2xl font-bold">+$120</p>
+          </div>
+        </div>
+        <div className="flex w-full justify-end mb-4">
+          <button
+            onClick={onBackClick}
+            className="bg-black text-white font-bold py-2 px-4 rounded-full hover:bg-gray-800 transition-colors"
+            aria-label="返回主畫面"
+          >
+            返回
+          </button>
+        </div>
+        {/* 示例遊戲內容 */}
+        <div className="grid grid-cols-2 gap-4 w-full">
+          <button className="flex items-center justify-center bg-blue-500 text-white font-bold py-4 rounded-lg hover:bg-blue-600 transition-colors" aria-label="遊戲1">
+            <i className="fas fa-dice mr-2"></i> 遊戲 1
+          </button>
+          <button className="flex items-center justify-center bg-orange-500 text-white font-bold py-4 rounded-lg hover:bg-orange-600 transition-colors" aria-label="活動1">
+            <i className="fas fa-trophy mr-2"></i> 活動 1
+          </button>
+        </div>
+        <div className="fixed bottom-0 w-full bg-white flex justify-around py-4 border-t">
+          <button onClick={onBackClick} className={`text-2xl ${currentScreen === 'main' ? 'text-teal-500' : 'text-gray-600'} icon-hover`} aria-label="首頁">
+            <i className="fas fa-home"></i>
+          </button>
+          <button className="text-2xl text-gray-600 icon-hover" aria-label="搜尋">
+            <i className="fas fa-search"></i>
+          </button>
+          <button className="text-2xl text-gray-600 icon-hover" aria-label="交易">
+            <i className="fas fa-exchange-alt"></i>
+          </button>
+          <button className="text-2xl text-gray-600 icon-hover" aria-label="支付">
+            <i className="fas fa-credit-card"></i>
+          </button>
+        </div>
+      </div>
+    );
+
+    // 日曆畫面組件
+    const CalendarScreen = ({ onBackClick, currentScreen }) => {
+      const [focusedDate, setFocusedDate] = useState(new Date());
+      const [selectedDate, setSelectedDate] = useState(new Date());
+      const today = new Date();
+
+      const firstDayOfMonth = new Date(focusedDate.getFullYear(), focusedDate.getMonth(), 1);
+      const lastDayOfMonth = new Date(focusedDate.getFullYear(), focusedDate.getMonth() + 1, 0);
+      const firstDayWeekday = firstDayOfMonth.getDay();
+
+      const previousMonth = () => {
+        setFocusedDate(new Date(focusedDate.getFullYear(), focusedDate.getMonth() - 1, 1));
+      };
+
+      const nextMonth = () => {
+        setFocusedDate(new Date(focusedDate.getFullYear(), focusedDate.getMonth() + 1, 1));
+      };
+
+      const selectDate = (date) => {
+        setSelectedDate(date);
+      };
+
+      const addEvent = () => {
+        if (selectedDate.getTime() === new Date(0).getTime()) {
+          alert('請先選擇一個日期');
+        } else {
+          alert(`添加事件到 ${selectedDate.getDate()}日`);
+        }
+      };
+
+      const days = [];
+      for (let i = 0; i < firstDayWeekday; i++) {
+        days.push(<div key={`empty-${i}`} className="p-2"></div>);
+      }
+
+      for (let day = 1; day <= lastDayOfMonth.getDate(); day++) {
+        const currentDate = new Date(focusedDate.getFullYear(), focusedDate.getMonth(), day);
+        const isSelected = currentDate.toDateString() === selectedDate.toDateString();
+        const isToday = currentDate.toDateString() === today.toDateString();
+
+        days.push(
+          <div
+            key={day}
+            onClick={() => selectDate(currentDate)}
+            className={`p-2 text-center cursor-pointer rounded-full ${
+              isSelected ? 'bg-blue-200 font-bold' : ''
+            } ${isToday ? 'border-2 border-red-500 rounded-full' : ''} hover:bg-blue-100 transition-colors`}
+            role="button"
+            aria-label={`選擇 ${focusedDate.getMonth() + 1}月 ${day}日`}
+          >
+            {day}
+          </div>
+        );
+      }
+
+      return (
+        <div className="flex flex-col items-center h-screen bg-[#B2E4C9] p-4">
+          <div className="flex justify-between w-full mb-4">
+            <button className="text-2xl text-gray-600 icon-hover" aria-label="開啟選單">
+              <i className="fas fa-bars"></i>
+            </button>
+            <h1 className="text-xl font-bold">ALL IN</h1>
+            <div className="w-8 h-8 bg-gray-300 rounded-full"></div>
+          </div>
+          <div className="w-full bg-white p-4 rounded-lg shadow mb-4">
+            <div className="flex justify-between mb-4">
+              <span className="text-lg font-bold">{`${focusedDate.getMonth() + 1}月 ${focusedDate.getFullYear()}`}</span>
+              <div>
+                <button onClick={previousMonth} className="text-2xl text-gray-600 icon-hover mr-2" aria-label="上個月">
+                  <i className="fas fa-chevron-left"></i>
+                </button>
+                <button onClick={nextMonth} className="text-2xl text-gray-600 icon-hover" aria-label="下個月">
+                  <i className="fas fa-chevron-right"></i>
+                </button>
+              </div>
+            </div>
+            <div className="grid grid-cols-7 text-center mb-2">
+              {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((day, index) => (
+                <div key={index} className="font-bold">{day}</div>
+              ))}
+            </div>
+            <div className="grid grid-cols-7 text-center">{days}</div>
+          </div>
+          <div className="absolute bottom-16">
+            <button
+              onClick={addEvent}
+              className="bg-gray-300 text-black text-2xl w-12 h-12 rounded-full flex items-center justify-center hover:bg-gray-400 hover:scale-110 transition-transform duration-200"
+              aria-label="新增事件"
+            >
+              <i className="fas fa-plus"></i>
+            </button>
+          </div>
+          <div className="fixed bottom-0 w-full bg-white flex justify-around py-4 border-t">
+            <button onClick={onBackClick} className={`text-2xl ${currentScreen === 'main' ? 'text-teal-500' : 'text-gray-600'} icon-hover`} aria-label="首頁">
+              <i className="fas fa-home"></i>
+            </button>
+            <button className="text-2xl text-gray-600 icon-hover" aria-label="搜尋">
+              <i className="fas fa-search"></i>
+            </button>
+            <button className="text-2xl text-gray-600 icon-hover" aria-label="交易">
+              <i className="fas fa-exchange-alt"></i>
+            </button>
+            <button className="text-2xl text-gray-600 icon-hover" aria-label="支付">
+              <i className="fas fa-credit-card"></i>
+            </button>
+          </div>
+        </div>
+      );
+    };
+
+    // 主應用程式組件
+    const App = () => {
+      const [screen, setScreen] = useState('main');
+
+      const handleShopClick = () => setScreen('shop');
+      const handleGamesClick = () => setScreen('games');
+      const handleCalendarClick = () => setScreen('calendar');
+      const handleBackClick = () => setScreen('main');
+
+      return (
+        <div>
+          {screen === 'main' && (
+            <MainScreen
+              onShopClick={handleShopClick}
+              onGamesClick={handleGamesClick}
+              onCalendarClick={handleCalendarClick}
+              currentScreen={screen}
+            />
+          )}
+          {screen === 'shop' && <ShopScreen onBackClick={handleBackClick} currentScreen={screen} />}
+          {screen === 'games' && <GamesScreen onBackClick={handleBackClick} currentScreen={screen} />}
+          {screen === 'calendar' && <CalendarScreen onBackClick={handleBackClick} currentScreen={screen} />}
+        </div>
+      );
+    };
+
+    // 渲染應用程式
+    ReactDOM.render(<App />, document.getElementById('root'));
+  </script>
+</body>
+</html>
+
